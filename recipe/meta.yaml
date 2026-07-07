@@ -1,5 +1,5 @@
 {% set versions = {
-    "0.0.0": "REPLACE_WITH_SHA256"
+    "3.7.2": "fa36c0716ab0526cb98693094b7efa2219434bed9f59429f123b654a33309848"
 } %}
 
 {% set version = environ.get('COMMIT_VERSION', None) %}
@@ -13,7 +13,7 @@ package:
   version: {{ environ.get('ANACONDA_VERSION', version)|replace("-", ".") }}
 
 source:
-  url: "https://bitbucket.org/hameren/oneloop/archive/refs/tags/{{ version }}.tar.gz"   # TODO: confirm upstream's actual tag/tarball naming
+  url: "https://bitbucket.org/hameren/oneloop/get/v{{ version }}.zip"
   {% if versions.get(version, None) %}
   sha256: {{ versions.get(version) }}
   {% endif %}
@@ -21,28 +21,31 @@ source:
 build:
   number: 0
   run_exports:
-    - {{ pin_subpackage(name, max_pin="x.x.x") }}
+    - {{ pin_subpackage(name, max_pin="x.x") }}
 
 requirements:
   build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
     - {{ stdlib('c') }}
-    - cmake
-    - make
-  host:
-    # TODO: library dependencies
-  run:
-    # TODO: runtime dependencies
+    - {{ compiler('gfortran') }}
+    - sed
+    - python
 
 test:
+  requires:
+    - {{ compiler('gfortran') }}
   commands:
-    - echo "TODO: a real smoke test"
+    - test -f $PREFIX/lib/libavh_olo${SHLIB_EXT}
+    - test -f $PREFIX/include/oneloop/avh_olo.mod
 
 about:
-  home: "https://bitbucket.org/hameren/oneloop"
+  home: "https://bitbucket.org/hameren/oneloop/"
   license: "GPL-3.0-only"
+  license_file: COPYING
   summary: "OneLOop: fast numerical evaluation of one-loop scalar integrals"
+  description: |
+    OneLOop evaluates the one-loop scalar 1-, 2-, 3-, and 4-point functions
+    for all kinematical configurations relevant to collider physics, with
+    dimensional regularization for UV and IR divergences.
 
 extra:
   recipe-maintainers:

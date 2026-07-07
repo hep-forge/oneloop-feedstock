@@ -1,13 +1,12 @@
 #! /usr/bin/bash
 set -e
 
-mkdir -p build
-cd build
+sed -i "s|FC = gfortran|FC = ${FC}|g" Config
+sed -i "s|FFLAGS = -O|FFLAGS = ${FFLAGS}|g" Config
 
-cmake .. \
-  -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
-  -DCMAKE_BUILD_TYPE=Release
+python create.py dynamic
 
-NPROC=$(nproc 2>/dev/null || sysctl -n hw.ncpu)
-make -j"$NPROC"
-make install
+mkdir -p "${PREFIX}/include/oneloop"
+mv *.mod "${PREFIX}/include/oneloop/"
+mv "libavh_olo${SHLIB_EXT}" "${PREFIX}/lib/"
+./clean.sh
