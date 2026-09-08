@@ -26,13 +26,13 @@ build:
 requirements:
   build:
     - {{ stdlib('c') }}
-    - {{ compiler('gfortran') }}
+    - {{ compiler('fortran') }}
     - sed
     - python
 
 test:
   requires:
-    - {{ compiler('gfortran') }}
+    - {{ compiler('fortran') }}
   commands:
     - test -f $PREFIX/lib/libavh_olo${SHLIB_EXT}
     - test -f $PREFIX/include/oneloop/avh_olo.mod
