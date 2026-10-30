@@ -1,5 +1,7 @@
+# Bitbucket regenerates its tag archives: on 2026-10-30 the v3.7.2 zip
+# changed bytes while still holding commit 4b012d009f22 (the v3.7.2 tag).
 {% set versions = {
-    "3.7.2": "fa36c0716ab0526cb98693094b7efa2219434bed9f59429f123b654a33309848"
+    "3.7.2": "0f6b939aa07580a69c29a78aeed604db347217f676fd1ab5f6441b17719b661d"
 } %}
 
 {% set version = environ.get('COMMIT_VERSION', None) %}
